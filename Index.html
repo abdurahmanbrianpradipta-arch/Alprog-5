@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="id">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jumlah Penduduk Kota Depok 2024</title>
+
+  <!-- Memanggil library Chart.js untuk membuat diagram batang -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Memanggil library Leaflet untuk menampilkan peta -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- Bagian CSS untuk mengatur tampilan halaman -->
+  <style>
+   body {
+      font-family: Arial, sans-serif;
+      background-color: #5e6dda;
+      margin: 0;
+      padding: 0;
+   }
+
+   /* Pengaturan tata letak utama */
+   .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      text-align: center;
+   }
+
+   /* Bagian header dengan gambar latar */
+   .header {
+      position: relative;
+      color: white;
+   }
+   .header img {
+      width: 100%;
+      height: auto;
+   }
+
+   /* Overlay transparan di atas gambar header */
+   .header .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(131, 140, 208, 0.8);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+   }
+
+   /* Logo Depok di header */
+   .header .overlay img {
+      width: 150px;
+      height: auto;
+   }
+
+   .header .overlay h1 {
+      font-size: 36px;
+      margin: 10px 0;
+   }
+
+   .header .overlay p {
+      font-size: 18px;
+      margin: 10px 0;
+   }
+
+   /* Bagian konten utama */
+   .content {
+      background-color: #fdfdfd;
+      padding: 20px;
+      color: black;
+   }
+
+   /* Tabel data penduduk */
+   .content table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+   }
+   .content table, .content th, .content td {
+      border: 1px solid #0c0c0f;
+   }
+   .content th, .content td {
+      padding: 10px;
+      text-align: center;
+   }
+   .content th {
+      background-color: #290797;
+      color: white;
+   }
+
+   /* Paragraf deskripsi */
+   .info {
+      text-align: justify;
+      margin-top: 20px;
+      font-size: 15px;
+      line-height: 1.6;
+   }
+
+   /* Kanvas untuk Chart.js */
+   #pendudukChart {
+      margin-top: 40px;
+      width: 100%;
+      max-width: 900px;
+   }
+
+   /* Area peta Leaflet */
+   #map {
+      height: 400px;
+      width: 100%;
+      margin-top: 30px;
+      border-radius: 10px;
+   }
+
+   /* Footer halaman */
+   footer {
+      background-color: #290797;
+      color: white;
+      text-align: center;
+      padding: 15px;
+      margin-top: 40px;
+      border-radius: 0 0 10px 10px;
+   }
+  </style>
+ </head>
+
+ <body>
+  <div class="container">
+   <!-- Bagian header dengan gambar latar dan deskripsi kota -->
+   <div class="header">
+    <img alt="Background image of Depok city" src="https://events.rumah123.com/news-content/img/2021/06/15120033/Penyangga-Kota-Depok.jpg"/>
+    <div class="overlay">
+     <img alt="Depok logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Lambang_Kota_Depok_%28Hi-Res%29.png/960px-Lambang_Kota_Depok_%28Hi-Res%29.png"/>
+     <h1>Jumlah Penduduk Menurut Kelompok Umur dan Jenis Kelamin di Kota Depok (Jiwa), 2024</h1>
+     <p>Depok adalah sebuah kota di Provinsi Jawa Barat, Indonesia, yang berbatasan langsung dengan Jakarta di sebelah utara. Kota ini dikenal sebagai kawasan pendidikan dan hunian yang terus berkembang pesat, serta memiliki 11 kecamatan dengan luas sekitar 200,29 km².</p>
+    </div>
+   </div>
+
+   <div class="content">
+    <!-- Tabel data jumlah penduduk -->
+    <table>
+      <tr>
+        <th>Kelompok Umur (Tahun) <br><i>Age Group (Years)</i></th>
+        <th>Laki-laki <br><i>Male</i></th>
+        <th>Perempuan <br><i>Female</i></th>
+        <th>Jumlah <br><i>Total</i></th>
+      </tr>
+      <!-- Baris data tiap kelompok umur -->
+      <tr><td>0 - 4</td><td>85,575</td><td>81,966</td><td>167,541</td></tr>
+      <tr><td>5 - 9</td><td>84,943</td><td>80,925</td><td>165,868</td></tr>
+      <tr><td>10 - 14</td><td>84,709</td><td>81,290</td><td>165,999</td></tr>
+      <tr><td>15 - 19</td><td>90,105</td><td>84,130</td><td>174,235</td></tr>
+      <tr><td>20 - 24</td><td>82,955</td><td>79,390</td><td>162,345</td></tr>
+      <tr><td>25 - 29</td><td>81,380</td><td>79,780</td><td>161,160</td></tr>
+      <tr><td>30 - 34</td><td>85,002</td><td>86,772</td><td>171,774</td></tr>
+      <tr><td>35 - 39</td><td>87,868</td><td>89,734</td><td>177,602</td></tr>
+      <tr><td>40 - 44</td><td>86,989</td><td>86,206</td><td>173,195</td></tr>
+      <tr><td>45 - 49</td><td>84,646</td><td>81,953</td><td>166,599</td></tr>
+      <tr><td>50 - 54</td><td>72,575</td><td>70,743</td><td>143,318</td></tr>
+      <tr><td>55 - 59</td><td>59,060</td><td>58,731</td><td>117,791</td></tr>
+      <tr><td>60 - 64</td><td>43,343</td><td>45,010</td><td>88,353</td></tr>
+      <tr><td>65 - 69</td><td>29,027</td><td>31,536</td><td>60,563</td></tr>
+      <tr><td>70 - 74</td><td>18,085</td><td>20,473</td><td>38,558</td></tr>
+      <tr><td>75+</td><td>12,497</td><td>16,237</td><td>28,734</td></tr>
+      <!-- Total keseluruhan -->
+      <tr style="font-weight:bold;">
+        <td>Jumlah</td><td>1,088,759</td><td>1,074,876</td><td>2,163,635</td>
+      </tr>
+    </table>
+
+    <!-- Sumber data -->
+    <p><b>Keterangan Data :</b><br>
+      Sumber : Data 2023–2024 BPS, Proyeksi Penduduk Kabupaten/Kota di Provinsi Jawa Barat 2020–2035
+    </p>
+
+    <!-- Paragraf analisis deskriptif -->
+    <div class="info">
+      Berdasarkan data di atas, jumlah penduduk Kota Depok pada tahun 2024 mencapai <b>2.163.635 jiwa</b> yang terdiri dari <b>1.088.759 laki-laki</b> dan <b>1.074.876 perempuan</b>. 
+      Komposisi penduduk menunjukkan bahwa kelompok umur produktif (15–64 tahun) mendominasi, yang mencerminkan potensi ekonomi dan tenaga kerja yang besar di wilayah ini. 
+      Sementara itu, rasio jenis kelamin di Kota Depok relatif seimbang, dengan sedikit keunggulan jumlah penduduk laki-laki. 
+      Hal ini menunjukkan struktur demografi yang stabil serta pertumbuhan populasi yang berkesinambungan, sejalan dengan perkembangan sosial dan ekonomi kota sebagai wilayah penyangga ibu kota.
+    </div>
+
+    <!-- Diagram batang menggunakan Chart.js -->
+    <h3 style="margin-top: 30px;">Diagram Batang Jumlah Penduduk per Kelompok Umur</h3>
+    <canvas id="pendudukChart"></canvas>
+
+    <!-- Peta Kota Depok menggunakan Leaflet -->
+    <h3 style="margin-top: 40px;">Peta Kota Depok</h3>
+    <div id="map"></div>
+   </div>
+  </div>
+
+  <!-- Footer dengan nama pembuat -->
+  <footer>
+    Dibuat oleh: <b>Abdurahman Brian Pradipta 2025</b>
+  </footer>
+
+  <!-- Bagian JavaScript -->
+  <script>
+    // === Membuat Diagram Batang Chart.js ===
+    const ctx = document.getElementById('pendudukChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'bar', // Jenis grafik
+      data: {
+        labels: ['0-4', '5-9', '10-14', '15-19', '20-24', '25-29', '30-34', '35-39', '40-44', '45-49', '50-54', '55-59', '60-64', '65-69', '70-74', '75+'],
+        datasets: [{
+          label: 'Jumlah Penduduk (Jiwa)',
+          data: [167541, 165868, 165999, 174235, 162345, 161160, 171774, 177602, 173195, 166599, 143318, 117791, 88353, 60563, 38558, 28734],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: { display: true, text: 'Jumlah Penduduk' }
+          },
+          x: {
+            title: { display: true, text: 'Kelompok Umur (Tahun)' }
+          }
+        },
+        plugins: { legend: { display: false } }
+      }
+    });
+
+    // === Menampilkan Peta Leaflet ===
+    const map = L.map('map').setView([-6.394525325502637, 106.80891659622311], 13);
+
+    // Menambahkan layer peta dasar dari OpenStreetMap
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Menandai lokasi Kota Depok dengan popup
+    L.marker([-6.394525325502637, 106.80891659622311]).addTo(map)
+      .bindPopup('<b>Kota Depok</b><br>Provinsi Jawa Barat, Indonesia')
+      .openPopup();
+  </script>
+ </body>
+</html>
